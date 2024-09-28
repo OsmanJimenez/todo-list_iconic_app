@@ -5,34 +5,36 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Remote Config Test</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <ion-item *ngIf="showAddTaskButton$ | async">
     <ion-input [placeholder]="config.TEXTS.TASK_TITLE_PLACEHOLDER" [(ngModel)]="newTaskTitle"></ion-input>
     <ion-input [placeholder]="config.TEXTS.CATEGORY_ID_PLACEHOLDER" [(ngModel)]="newTaskCategoryId"></ion-input>
-    <ion-button (click)="addTask()">{{ config.TEXTS.ADD_TASK_BUTTON }}</ion-button>
+    <ion-button (click)="addTask()">{{ config.BUTTONS.ADD_TASK.TEXT }}</ion-button>
   </ion-item>
 
   <ion-item *ngIf="enableCategoryFilter$ | async">
     <ion-label>{{ config.TEXTS.FILTER_CATEGORY_PLACEHOLDER }}</ion-label>
-    <ion-input placeholder="ID de Categoría" [(ngModel)]="filterCategoryId"></ion-input>
+    <ion-input [placeholder]="config.TEXTS.FILTER_INPUT_CATEGORY_PLACEHOLDER" [(ngModel)]="filterCategoryId"></ion-input>
   </ion-item>
 
   <ion-list>
     <ion-item *ngFor="let task of getFilteredTasks()">
-      <ion-label [class.completed]="task.completed">{{ task.title }} ({{ task.categoryId ||
-        config.TEXTS.NO_CATEGORY_TEXT }})</ion-label>
-      <ion-checkbox slot="start" [(ngModel)]="task.completed" (ionChange)="toggleCompletion(task)"
-        *ngIf="allowTaskCompletion$ | async"></ion-checkbox>
-      <ion-button slot="end" color="danger" (click)="deleteTask(task.id)" *ngIf="allowTaskDeletion$ | async">
-        {{ config.TEXTS.DELETE_TASK_BUTTON }}
+      <ion-label [class.completed]="task.completed">
+        {{ task.title }} ({{ task.categoryId || config.TEXTS.NO_CATEGORY_TEXT }})
+      </ion-label>
+      <ion-checkbox
+        [attr.slot]="config.CHECKBOX.COMPLETION.SLOT"
+        [(ngModel)]="task.completed"
+        (ionChange)="toggleCompletion(task)"
+        *ngIf="allowTaskCompletion$ | async"
+      ></ion-checkbox>
+      <ion-button
+        [attr.slot]="config.BUTTONS.DELETE_TASK.SLOT"
+        [color]="config.BUTTONS.DELETE_TASK.COLOR"
+        (click)="deleteTask(task.id)"
+        *ngIf="allowTaskDeletion$ | async"
+      >
+        {{ config.BUTTONS.DELETE_TASK.TEXT }}
       </ion-button>
     </ion-item>
   </ion-list>
-
 </ion-content>

@@ -30,15 +30,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
   findAll(): Task[] {
     const tasks = this.storageService.get<Task[]>(this.STORAGE_KEY);
     return tasks
-      ? tasks.map(
-          (taskData: any) =>
-            new Task(
-              taskData.id,
-              taskData.title,
-              taskData.completed,
-              taskData.categoryId
-            )
-        )
+      ? tasks.map((taskData: any) => new Task(taskData.id, taskData.title, taskData.completed, taskData.categoryId))
       : [];
   }
 }

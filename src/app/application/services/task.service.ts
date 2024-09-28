@@ -7,9 +7,7 @@ import { TASK_REPOSITORY_TOKEN } from '../ports/task-repository.token';
   providedIn: 'root',
 })
 export class TaskService {
-  constructor(
-    @Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository
-  ) {}
+  constructor(@Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository) {}
 
   addTask(title: string, categoryId?: string): Task {
     const newTask = new Task(this.generateId(), title, false, categoryId);

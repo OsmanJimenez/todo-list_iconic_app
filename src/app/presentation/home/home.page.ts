@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../application/services/task.service';
 import { Task } from '../../domain/models/task.model';
 import { HOME_CONFIG } from './home.config';
-import { fetchAndActivate, RemoteConfig } from '@angular/fire/remote-config';
-import { getStringChanges } from '@angular/fire/remote-config';
-import { from, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
 
 @Component({
   selector: 'app-home',
@@ -26,37 +25,20 @@ export class HomePage implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private remoteConfig: RemoteConfig
+    private remoteConfigService: RemoteConfigService
   ) {
     this.loadTasks();
   }
 
   ngOnInit() {
-    this.remoteConfig.settings.minimumFetchIntervalMillis = 0;
-
-    from(fetchAndActivate(this.remoteConfig)).subscribe(
+    this.remoteConfigService.activateRemoteConfig().subscribe(
       () => {
         console.log('Remote Config activado y listo.');
 
-        this.allowTaskCompletion$ = getStringChanges(
-          this.remoteConfig,
-          'allowTaskCompletion'
-        ).pipe(map(value => value === 'true'));
-
-        this.allowTaskDeletion$ = getStringChanges(
-          this.remoteConfig,
-          'allowTaskDeletion'
-        ).pipe(map(value => value === 'true'));
-
-        this.showAddTaskButton$ = getStringChanges(
-          this.remoteConfig,
-          'showAddTaskButton'
-        ).pipe(map(value => value === 'true'));
-
-        this.enableCategoryFilter$ = getStringChanges(
-          this.remoteConfig,
-          'enableCategoryFilter'
-        ).pipe(map(value => value === 'true'));
+        this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$('allowTaskCompletion');
+        this.allowTaskDeletion$ = this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
+        this.showAddTaskButton$ = this.remoteConfigService.getBooleanValue$('showAddTaskButton');
+        this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$('enableCategoryFilter');
       },
       err => {
         console.error('Error al activar Remote Config:', err);
