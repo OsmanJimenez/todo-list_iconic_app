@@ -5,30 +5,34 @@
 </ion-header>
 
 <ion-content>
-  <!-- Input para añadir nuevas tareas con categoryId -->
-  <ion-item>
-    <ion-input [placeholder]="config.TEXTS.TASK_TITLE_PLACEHOLDER" [(ngModel)]="newTaskTitle"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-input [placeholder]="config.TEXTS.CATEGORY_ID_PLACEHOLDER" [(ngModel)]="newTaskCategoryId"></ion-input>
-  </ion-item>
-  <ion-button (click)="addTask()">{{ config.TEXTS.ADD_TASK_BUTTON }}</ion-button>
 
-  <!-- Filtro por categoryId -->
-  <ion-item>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Remote Config Test</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-item *ngIf="showAddTaskButton$ | async">
+    <ion-input [placeholder]="config.TEXTS.TASK_TITLE_PLACEHOLDER" [(ngModel)]="newTaskTitle"></ion-input>
+    <ion-input [placeholder]="config.TEXTS.CATEGORY_ID_PLACEHOLDER" [(ngModel)]="newTaskCategoryId"></ion-input>
+    <ion-button (click)="addTask()">{{ config.TEXTS.ADD_TASK_BUTTON }}</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="enableCategoryFilter$ | async">
     <ion-label>{{ config.TEXTS.FILTER_CATEGORY_PLACEHOLDER }}</ion-label>
     <ion-input placeholder="ID de Categoría" [(ngModel)]="filterCategoryId"></ion-input>
   </ion-item>
 
-  <!-- Lista de tareas filtradas -->
   <ion-list>
     <ion-item *ngFor="let task of getFilteredTasks()">
       <ion-label [class.completed]="task.completed">{{ task.title }} ({{ task.categoryId ||
         config.TEXTS.NO_CATEGORY_TEXT }})</ion-label>
-      <ion-checkbox slot="start" [(ngModel)]="task.completed" (ionChange)="toggleCompletion(task)"></ion-checkbox>
-      <ion-button slot="end" color="danger" (click)="deleteTask(task.id)">
+      <ion-checkbox slot="start" [(ngModel)]="task.completed" (ionChange)="toggleCompletion(task)"
+        *ngIf="allowTaskCompletion$ | async"></ion-checkbox>
+      <ion-button slot="end" color="danger" (click)="deleteTask(task.id)" *ngIf="allowTaskDeletion$ | async">
         {{ config.TEXTS.DELETE_TASK_BUTTON }}
       </ion-button>
     </ion-item>
   </ion-list>
+
 </ion-content>
