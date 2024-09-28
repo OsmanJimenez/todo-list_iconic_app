@@ -1,0 +1,42 @@
+# Dependencias de Node.js
+/node_modules/
+/package-lock.json
+
+# Dependencias temporales
+/tmp/
+/dist/
+/out/
+/coverage/
+/platforms/
+/plugins/
+
+# Compilación de Cordova
+/www/
+.sourcemaps
+
+# Configuración del entorno
+/.env
+/src/environments/environment*.ts
+
+# Archivos de configuración de IDEs
+.idea/
+.vscode/
+.angular/
+*.swp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Reportes de Jest
+/coverage/
+/test-results/
+
+# Otros archivos generados
+/www/
+/resources/
