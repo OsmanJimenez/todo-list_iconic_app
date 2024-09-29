@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TaskService } from '../../../../application/services/task.service';
 import { Task } from '../../../../domain/models/task.model';
 import { TASKS_CONFIG } from './tasks.config';
-import { AlertController } from '@ionic/angular'; // Importa el controlador de alertas
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tasks',
@@ -27,7 +27,7 @@ export class TasksComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private alertController: AlertController
-  ) {} // Añade el AlertController
+  ) {}
 
   ngOnInit() {
     this.loadTasks();
@@ -41,7 +41,6 @@ export class TasksComponent implements OnInit {
     this.page = 0;
     this.tasks = this.taskService.getTasks(0, this.pageSize);
     this.totalTasks = this.tasks.length;
-
     this.applyFilter();
   }
 
@@ -49,7 +48,6 @@ export class TasksComponent implements OnInit {
     this.page++;
     const nextTasks = this.taskService.getTasks(this.page, this.pageSize);
     this.tasks = [...this.tasks, ...nextTasks];
-
     this.applyFilter();
     event.target.complete();
 
@@ -81,19 +79,19 @@ export class TasksComponent implements OnInit {
 
   async presentDeleteConfirm(task: Task) {
     const alert = await this.alertController.create({
-      header: 'Confirmar Eliminación',
-      message: `¿Estás seguro de que deseas eliminar la Actividad "${task.title}" en la categoría "${task.categoryId || 'Sin Categoría'}"?`,
-      cssClass: 'custom-alert', // Clase personalizada para agregar estilos
+      header: this.config.TEXTS.DELETE_CONFIRM_HEADER,
+      message: `${this.config.TEXTS.DELETE_CONFIRM_MESSAGE.replace('{title}', task.title).replace('{category}', task.categoryId || this.config.TEXTS.NO_CATEGORY_TEXT)}`,
+      cssClass: 'custom-alert',
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.config.BUTTONS.CANCEL.TEXT,
           role: 'cancel',
           handler: () => {
-            console.log('Eliminación cancelada');
+            console.log(this.config.TEXTS.DELETE_CANCELLED);
           },
         },
         {
-          text: 'Eliminar',
+          text: this.config.BUTTONS.DELETE_TASK.TEXT,
           role: 'confirm',
           handler: () => {
             this.deleteTask(task.id);
@@ -113,7 +111,14 @@ export class TasksComponent implements OnInit {
   }
 
   openEditTaskModal(task: Task) {
-    this.selectedTask = new Task(task.id, task.title, task.status, task.categoryId, task.createdAt, task.date);
+    this.selectedTask = new Task(
+      task.id,
+      task.title,
+      task.status,
+      task.categoryId,
+      task.createdAt,
+      task.date
+    );
     this.isEditTaskModalOpen = true;
   }
 

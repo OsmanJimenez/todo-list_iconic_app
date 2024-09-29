@@ -1,4 +1,4 @@
-export const ADD_TASK_CONFIG = Object.freeze({
+export const UPDATE_TASK_CONFIG = Object.freeze({
   TEXTS: {
     TASK_TITLE: 'Actividad',
     TASK_TITLE_PLACEHOLDER: 'Ingresa la actividad',
@@ -10,8 +10,8 @@ export const ADD_TASK_CONFIG = Object.freeze({
     NO_DATE_SELECTED: 'No se ha seleccionado ninguna fecha',
   },
   BUTTONS: {
-    ADD_TASK: {
-      TEXT: 'Agregar Actividad',
+    SAVE_TASK: {
+      TEXT: 'Guardar Actividad',
     },
   },
   ALERTS: {
