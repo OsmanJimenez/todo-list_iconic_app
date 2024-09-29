@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Task } from '../../../../domain/models/task.model';
 import { TaskService } from '../../../../application/services/task.service';
 import { UPDATE_TASK_CONFIG } from './update-task.config';
-import { AlertController } from '@ionic/angular'; // Importamos AlertController
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-update-task',
@@ -10,18 +10,18 @@ import { AlertController } from '@ionic/angular'; // Importamos AlertController
   styleUrls: ['./update-task.component.scss'],
 })
 export class UpdateTaskComponent implements OnInit {
-  @Input() task!: Task;
-  @Input() allowTaskUpdate: boolean | null = null;
-  @Output() taskUpdated = new EventEmitter<Task>();
-  editableTask!: Task;
-  config = UPDATE_TASK_CONFIG;
+  @Input() public task!: Task;
+  @Input() public allowTaskUpdate: boolean | null = null;
+  @Output() public taskUpdated = new EventEmitter<Task>();
+  public editableTask!: Task;
+  public config = UPDATE_TASK_CONFIG;
 
   constructor(
     private taskService: TaskService,
-    private alertController: AlertController // Añadimos AlertController
+    private alertController: AlertController
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.editableTask = new Task(
       this.task.id,
       this.task.title,
@@ -32,9 +32,8 @@ export class UpdateTaskComponent implements OnInit {
     );
   }
 
-  async saveTask() {
+  public async saveTask() {
     if (this.allowTaskUpdate && this.editableTask.title.trim()) {
-      // Si el título está completo, actualizamos la tarea
       this.taskService.updateTask(this.task.id, {
         title: this.editableTask.title,
         categoryId: this.editableTask.categoryId,
@@ -42,7 +41,6 @@ export class UpdateTaskComponent implements OnInit {
       });
       this.taskUpdated.emit(this.editableTask);
     } else {
-      // Si el título está vacío, mostramos una alerta
       const alert = await this.alertController.create({
         header: this.config.ALERTS.TITLE,
         message: this.config.ALERTS.MESSAGE,
@@ -52,7 +50,7 @@ export class UpdateTaskComponent implements OnInit {
     }
   }
 
-  clearDate() {
+  public clearDate() {
     if (this.allowTaskUpdate) {
       this.editableTask.date = null;
     }

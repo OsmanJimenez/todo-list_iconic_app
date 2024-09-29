@@ -10,41 +10,41 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./tasks.component.scss'],
 })
 export class TasksComponent implements OnInit {
-  tasks: Task[] = [];
-  filteredTasks: Task[] = [];
-  config = TASKS_CONFIG;
+  public tasks: Task[] = [];
+  public filteredTasks: Task[] = [];
+  public config = TASKS_CONFIG;
 
-  @Input() filterCategoryId: string = '';
-  @Input() allowTaskDeletion: boolean | null = null;
-  @Input() allowTaskUpdate: boolean | null = null;
+  @Input() public filterCategoryId: string = '';
+  @Input() public allowTaskDeletion: boolean | null = null;
+  @Input() public allowTaskUpdate: boolean | null = null;
 
-  isEditTaskModalOpen = false;
-  selectedTask!: Task;
-  page: number = 0;
-  pageSize: number = 20;
-  totalTasks: number = 0;
+  public isEditTaskModalOpen = false;
+  public selectedTask!: Task;
+  public page: number = 0;
+  public pageSize: number = 20;
+  public totalTasks: number = 0;
 
   constructor(
     private taskService: TaskService,
     private alertController: AlertController
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.loadTasks();
   }
 
-  ngOnChanges() {
+  public ngOnChanges() {
     this.applyFilter();
   }
 
-  loadTasks() {
+  public loadTasks() {
     this.page = 0;
     this.tasks = this.taskService.getTasks(0, this.pageSize);
     this.totalTasks = this.tasks.length;
     this.applyFilter();
   }
 
-  loadMoreTasks(event: any) {
+  public loadMoreTasks(event: any) {
     this.page++;
     const nextTasks = this.taskService.getTasks(this.page, this.pageSize);
     this.tasks = [...this.tasks, ...nextTasks];
@@ -56,7 +56,7 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  applyFilter() {
+  public applyFilter() {
     const query = this.filterCategoryId.trim().toLowerCase();
 
     if (query === '') {
@@ -72,12 +72,12 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  toggleCompletion(task: Task) {
+  public toggleCompletion(task: Task) {
     this.taskService.toggleTaskCompletion(task);
     this.loadTasks();
   }
 
-  async presentDeleteConfirm(task: Task) {
+  public async presentDeleteConfirm(task: Task) {
     const alert = await this.alertController.create({
       header: this.config.TEXTS.DELETE_CONFIRM_HEADER,
       message: `${this.config.TEXTS.DELETE_CONFIRM_MESSAGE.replace('{title}', task.title).replace('{category}', task.categoryId || this.config.TEXTS.NO_CATEGORY_TEXT)}`,
@@ -103,14 +103,14 @@ export class TasksComponent implements OnInit {
     await alert.present();
   }
 
-  deleteTask(taskId: string) {
+  public deleteTask(taskId: string) {
     if (this.allowTaskDeletion) {
       this.taskService.deleteTask(taskId);
       this.loadTasks();
     }
   }
 
-  openEditTaskModal(task: Task) {
+  public openEditTaskModal(task: Task) {
     this.selectedTask = new Task(
       task.id,
       task.title,
@@ -122,11 +122,11 @@ export class TasksComponent implements OnInit {
     this.isEditTaskModalOpen = true;
   }
 
-  closeEditTaskModal() {
+  public closeEditTaskModal() {
     this.isEditTaskModalOpen = false;
   }
 
-  onTaskUpdated(updatedTask: Task) {
+  public onTaskUpdated(updatedTask: Task) {
     const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
       this.tasks[index] = updatedTask;

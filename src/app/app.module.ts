@@ -9,7 +9,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
 import { environment } from '../environments/environment';
 import { LocalStorageTaskRepository } from './infrastructure/adapters/local-storage-task.repository';
-import { ENCRYPTION_KEY } from './infrastructure/services/encryption-key.token';
+import { ENCRYPTION_KEY } from './infrastructure/services/encrypted-storage/encryption-key.token';
 import { TASK_REPOSITORY_TOKEN } from './application/ports/task-repository.token';
 
 @NgModule({

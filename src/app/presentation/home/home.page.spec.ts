@@ -5,7 +5,7 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { Task } from '../../domain/models/task.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TaskStatus } from '../../domain/models/task-status.enum';
-import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config/remote-config.service';
 import { of } from 'rxjs';
 
 describe('HomePage', () => {
@@ -98,10 +98,18 @@ describe('HomePage', () => {
 
     // Assert
     expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskCompletion');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskDeletion');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('showAddTaskButton');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('enableCategoryFilter');
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'allowTaskCompletion'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'allowTaskDeletion'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'showAddTaskButton'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'enableCategoryFilter'
+    );
     expect(component.allowTaskCompletion$).toBeDefined();
     expect(component.allowTaskDeletion$).toBeDefined();
     expect(component.showAddTaskButton$).toBeDefined();
@@ -112,14 +120,23 @@ describe('HomePage', () => {
       When addTask is called,
       Then should call taskService.addTask and reload tasks`, () => {
     // Arrange
-    const taskData = { title: 'New Task', categoryId: '123', date: '2024-09-30' };
+    const taskData = {
+      title: 'New Task',
+      categoryId: '123',
+      date: '2024-09-30',
+    };
     jest.spyOn(component, 'loadTasks');
 
     // Act
     component.addTask(taskData);
 
     // Assert
-    expect(taskServiceMock.addTask).toHaveBeenCalledWith(taskData.title, taskData.categoryId, undefined, taskData.date);
+    expect(taskServiceMock.addTask).toHaveBeenCalledWith(
+      taskData.title,
+      taskData.categoryId,
+      undefined,
+      taskData.date
+    );
     expect(component.loadTasks).toHaveBeenCalled();
   });
 

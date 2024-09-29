@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../../domain/models/task.model';
 import { TaskRepository } from '../../application/ports/task.repository';
-import { EncryptedStorageService } from '../services/encrypted-storage.service';
+import { EncryptedStorageService } from '../services/encrypted-storage/encrypted-storage.service';
 
 @Injectable({
   providedIn: 'root',

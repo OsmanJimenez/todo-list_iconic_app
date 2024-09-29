@@ -4,7 +4,7 @@ import { Task } from '../../domain/models/task.model';
 import { HOME_CONFIG } from './home.config';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { Observable } from 'rxjs';
-import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config/remote-config.service';
 
 @Component({
   selector: 'app-home',
@@ -12,54 +12,70 @@ import { RemoteConfigService } from '../../infrastructure/services/remote-config
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  @ViewChild(TasksComponent) tasksComponent!: TasksComponent;
-  allowTaskCompletion$: Observable<boolean> | undefined;
-  allowTaskDeletion$: Observable<boolean> | undefined;
-  allowTaskUpdate$: Observable<boolean> | undefined;
-  showAddTaskButton$: Observable<boolean> | undefined;
-  enableCategoryFilter$: Observable<boolean> | undefined;
-  filterCategoryId: string = '';
-  isModalOpen = false;
-  config = HOME_CONFIG;
-  currentDate: Date = new Date();
+  @ViewChild(TasksComponent) public tasksComponent!: TasksComponent;
+  public allowTaskCompletion$: Observable<boolean> | undefined;
+  public allowTaskDeletion$: Observable<boolean> | undefined;
+  public allowTaskUpdate$: Observable<boolean> | undefined;
+  public showAddTaskButton$: Observable<boolean> | undefined;
+  public enableCategoryFilter$: Observable<boolean> | undefined;
+  public filterCategoryId: string = '';
+  public isModalOpen = false;
+  public config = HOME_CONFIG;
+  public currentDate: Date = new Date();
 
   constructor(
     private taskService: TaskService,
     private remoteConfigService: RemoteConfigService
   ) {}
 
-  ngOnInit() {
+  public ngOnInit() {
     this.remoteConfigService.activateRemoteConfig().subscribe(() => {
-      this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$('allowTaskCompletion');
-      this.allowTaskDeletion$ = this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
-      this.allowTaskUpdate$ = this.remoteConfigService.getBooleanValue$('allowTaskUpdate');
-      this.showAddTaskButton$ = this.remoteConfigService.getBooleanValue$('showAddTaskButton');
-      this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$('enableCategoryFilter');
+      this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$(
+        'allowTaskCompletion'
+      );
+      this.allowTaskDeletion$ =
+        this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
+      this.allowTaskUpdate$ =
+        this.remoteConfigService.getBooleanValue$('allowTaskUpdate');
+      this.showAddTaskButton$ =
+        this.remoteConfigService.getBooleanValue$('showAddTaskButton');
+      this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$(
+        'enableCategoryFilter'
+      );
     });
     this.loadTasks();
   }
 
-  loadTasks() {
+  public loadTasks() {
     this.tasksComponent.loadTasks();
   }
 
-  addTask(taskData: { title: string; categoryId?: string; date?: string }) {
-    this.taskService.addTask(taskData.title, taskData.categoryId, undefined, taskData.date);
+  public addTask(taskData: {
+    title: string;
+    categoryId?: string;
+    date?: string;
+  }) {
+    this.taskService.addTask(
+      taskData.title,
+      taskData.categoryId,
+      undefined,
+      taskData.date
+    );
     this.loadTasks();
     this.setOpen(false);
   }
 
-  toggleCompletion(task: Task) {
+  public toggleCompletion(task: Task) {
     this.taskService.toggleTaskCompletion(task);
     this.loadTasks();
   }
 
-  deleteTask(taskId: string) {
+  public deleteTask(taskId: string) {
     this.taskService.deleteTask(taskId);
     this.loadTasks();
   }
 
-  setOpen(isOpen: boolean) {
+  public setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
 }
