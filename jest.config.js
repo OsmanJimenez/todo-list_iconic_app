@@ -13,5 +13,9 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['html', 'text'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/src/test.ts'
+  ],
   coveragePathIgnorePatterns: ['/node_modules/', '/test/', '/environments/'],
 };

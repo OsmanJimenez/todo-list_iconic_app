@@ -1,0 +1,49 @@
+<ion-grid>
+  <ion-row class="header-content">
+    <ion-col size="12" size-md="6" class="app-title">
+      <h1>{{ config.TEXTS.WELCOME }}</h1>
+      <p class="current-date">{{ currentDate | date: 'fullDate' }}</p>
+    </ion-col>
+
+    <ion-col size="12" size-md="6" class="button-container">
+      <ion-button
+        (click)="setOpen(true)"
+        *ngIf="showAddTaskButton$ | async"
+        fill="outline"
+        color="success"
+        class="new-task-button"
+      >
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        {{ config.BUTTONS.ADD_TASK.TEXT }}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-content>
+  <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="setOpen(false)" class="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="no-shadow-toolbar">
+          <ion-button color="danger" fill="clear" slot="end" (click)="setOpen(false)">
+            <ion-icon slot="icon-only" name="close-circle-outline" ></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <app-add-task (addTask)="addTask($event)"></app-add-task>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <app-category-filter
+    *ngIf="enableCategoryFilter$ | async"
+    (filterCategory)="filterCategoryId = $event"
+  ></app-category-filter>
+
+  <app-tasks
+    [filterCategoryId]="filterCategoryId"
+    [allowTaskDeletion]="allowTaskDeletion$ | async"
+    [allowTaskUpdate]="allowTaskUpdate$ | async"
+  ></app-tasks>
+</ion-content>

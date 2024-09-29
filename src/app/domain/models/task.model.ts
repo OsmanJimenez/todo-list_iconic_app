@@ -1,12 +1,16 @@
+import { TaskStatus } from './task-status.enum';
+
 export class Task {
   constructor(
     public readonly id: string,
     public title: string,
-    public completed: boolean = false,
-    public categoryId?: string
+    public status: TaskStatus = TaskStatus.Pending,
+    public categoryId?: string,
+    public createdAt: Date = new Date(),
+    public date?: string | null,
   ) {}
 
-  toggleCompletion(): void {
-    this.completed = !this.completed;
+  setStatus(newStatus: TaskStatus): void {
+    this.status = newStatus;
   }
 }
