@@ -18,7 +18,7 @@ import { TASK_REPOSITORY_TOKEN } from './application/ports/task-repository.token
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: TASK_REPOSITORY_TOKEN, useClass: LocalStorageTaskRepository },
-    { provide: ENCRYPTION_KEY, useValue: 'defaultKey' },
+    { provide: ENCRYPTION_KEY, useValue: environment.encryptionKey },
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideRemoteConfig(() => getRemoteConfig()),
   ],
