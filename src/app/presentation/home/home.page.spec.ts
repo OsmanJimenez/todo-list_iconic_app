@@ -5,11 +5,14 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { Task } from '../../domain/models/task.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TaskStatus } from '../../domain/models/task-status.enum';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
+import { of } from 'rxjs';
 
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
   let taskServiceMock: any;
+  let remoteConfigServiceMock: any;
 
   const mockTask: Task = {
     id: '1',
@@ -28,10 +31,18 @@ describe('HomePage', () => {
       deleteTask: jest.fn(),
     };
 
+    remoteConfigServiceMock = {
+      activateRemoteConfig: jest.fn().mockReturnValue(of(true)),
+      getBooleanValue$: jest.fn((key: string) => of(true)),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [HomePage, TasksComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [{ provide: TaskService, useValue: taskServiceMock }],
+      providers: [
+        { provide: TaskService, useValue: taskServiceMock },
+        { provide: RemoteConfigService, useValue: remoteConfigServiceMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
@@ -66,15 +77,37 @@ describe('HomePage', () => {
 
   it(`Given HomePage instance,
       When ngOnInit is called,
-      Then should call loadTasks`, () => {
+      Then should call loadTasks and loadRemoteConfig`, () => {
     // Arrange
     jest.spyOn(component, 'loadTasks');
+    jest.spyOn(component, 'loadRemoteConfig');
 
     // Act
     component.ngOnInit();
 
     // Assert
     expect(component.loadTasks).toHaveBeenCalled();
+    expect(component.loadRemoteConfig).toHaveBeenCalled();
+  });
+
+  it(`Given remote config is activated,
+      When loadRemoteConfig is called,
+      Then it should initialize remote config observables`, () => {
+    // Act
+    component.loadRemoteConfig();
+
+    // Assert
+    expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskCompletion');
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskDeletion');
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('showAddTaskButton');
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('enableCategoryFilter');
+
+    // Check if observables are initialized
+    expect(component.allowTaskCompletion$).toBeDefined();
+    expect(component.allowTaskDeletion$).toBeDefined();
+    expect(component.showAddTaskButton$).toBeDefined();
+    expect(component.enableCategoryFilter$).toBeDefined();
   });
 
   it(`Given a new task,

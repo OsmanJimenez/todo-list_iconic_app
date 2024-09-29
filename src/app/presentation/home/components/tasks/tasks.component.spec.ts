@@ -62,35 +62,6 @@ describe('TasksComponent', () => {
     expect(component.filteredTasks.length).toBeLessThanOrEqual(component.pageSize);
   });
 
-  it(`Given category filter is applied,
-      When getFilteredTasks is called,
-      Then should return tasks filtered by categoryId`, () => {
-    // Arrange
-    component.filterCategoryId = '123';
-    component.tasks = mockTasks;
-
-    // Act
-    const filteredTasks = component.getFilteredTasks();
-
-    // Assert
-    expect(filteredTasks.length).toBe(1);
-    expect(filteredTasks[0].categoryId).toBe('123');
-  });
-
-  it(`Given no category filter is applied,
-      When getFilteredTasks is called,
-      Then should return all tasks`, () => {
-    // Arrange
-    component.filterCategoryId = '';
-    component.tasks = mockTasks;
-
-    // Act
-    const filteredTasks = component.getFilteredTasks();
-
-    // Assert
-    expect(filteredTasks.length).toBe(mockTasks.length);
-  });
-
   it(`Given a task's status is toggled,
       When toggleCompletion is called,
       Then should call taskService.toggleTaskCompletion and reload tasks`, () => {
@@ -106,12 +77,13 @@ describe('TasksComponent', () => {
     expect(component.loadTasks).toHaveBeenCalled();
   });
 
-  it(`Given a task is deleted,
+  it(`Given task deletion is allowed,
       When deleteTask is called,
       Then should call taskService.deleteTask and reload tasks`, () => {
     // Arrange
     const taskId = '1';
     jest.spyOn(component, 'loadTasks');
+    component.allowTaskDeletion = true;
 
     // Act
     component.deleteTask(taskId);
@@ -119,6 +91,39 @@ describe('TasksComponent', () => {
     // Assert
     expect(taskServiceMock.deleteTask).toHaveBeenCalledWith(taskId);
     expect(component.loadTasks).toHaveBeenCalled();
+  });
+
+  it(`Given task deletion is not allowed,
+      When deleteTask is called,
+      Then should not call taskService.deleteTask`, () => {
+    // Arrange
+    const taskId = '1';
+    jest.spyOn(component, 'loadTasks');
+    component.allowTaskDeletion = false;
+
+    // Act
+    component.deleteTask(taskId);
+
+    // Assert
+    expect(taskServiceMock.deleteTask).not.toHaveBeenCalled();
+    expect(component.loadTasks).not.toHaveBeenCalled();
+  });
+
+  it(`Given category filter is applied,
+      When applyFilter is called,
+      Then should filter tasks by categoryId and limit by page size`, () => {
+    // Arrange
+    component.filterCategoryId = '123';
+    component.page = 0;
+    component.pageSize = 2;
+    component.tasks = mockTasks;
+
+    // Act
+    component.applyFilter();
+
+    // Assert
+    expect(component.filteredTasks.length).toBe(1);
+    expect(component.filteredTasks.every(task => task.categoryId === '123')).toBeTruthy();
   });
 
   it(`Given more tasks are available,
@@ -172,4 +177,16 @@ describe('TasksComponent', () => {
     expect(mockEvent.target.disabled).toBe(true);
   });
 
+  it(`Given TasksComponent instance,
+      When ngOnChanges is called,
+      Then should apply the filter`, () => {
+    // Arrange
+    jest.spyOn(component, 'applyFilter');
+
+    // Act
+    component.ngOnChanges();
+
+    // Assert
+    expect(component.applyFilter).toHaveBeenCalled();
+  });
 });
