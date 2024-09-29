@@ -2,6 +2,7 @@
   <ion-input
     placeholder="Título de la tarea"
     [(ngModel)]="editableTask.title"
+    [disabled]="!allowTaskUpdate"
   ></ion-input>
 </ion-item>
 
@@ -9,24 +10,30 @@
   <ion-input
     placeholder="ID de la categoría (opcional)"
     [(ngModel)]="editableTask.categoryId"
+    [disabled]="!allowTaskUpdate"
   ></ion-input>
 </ion-item>
 
 <ion-item>
   <ion-label>Fecha (opcional)</ion-label>
-  <ion-datetime-button datetime="datePicker" [ngClass]="{ 'empty-date': !editableTask.date }"></ion-datetime-button>
+  <ion-datetime-button
+    datetime="datePicker"
+    [ngClass]="{ 'empty-date': !editableTask.date }"
+    [disabled]="!allowTaskUpdate"
+  ></ion-datetime-button>
   <ion-modal [keepContentsMounted]="true">
     <ng-template>
       <ion-datetime
         id="datePicker"
         presentation="date"
         [(ngModel)]="editableTask.date"
+        [disabled]="!allowTaskUpdate"
         placeholder="Seleccionar fecha"
       ></ion-datetime>
     </ng-template>
   </ion-modal>
 
-  <ion-button *ngIf="editableTask.date" fill="clear" (click)="clearDate()">
+  <ion-button *ngIf="editableTask.date" fill="clear" (click)="clearDate()" [disabled]="!allowTaskUpdate">
     <ion-icon name="close-circle"></ion-icon>
   </ion-button>
 </ion-item>
@@ -37,4 +44,4 @@
   <span *ngIf="!editableTask.date">No se ha seleccionado ninguna fecha</span>
 </ion-item>
 
-<ion-button expand="block" (click)="saveTask()">Guardar Tarea</ion-button>
+<ion-button expand="block" (click)="saveTask()" [disabled]="!allowTaskUpdate">Guardar Tarea</ion-button>

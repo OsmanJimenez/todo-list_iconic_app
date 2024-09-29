@@ -9,13 +9,13 @@ import { TaskService } from '../../../../application/services/task.service';
 })
 export class UpdateTaskComponent implements OnInit {
   @Input() task!: Task;
+  @Input() allowTaskUpdate: boolean | null = null;
   @Output() taskUpdated = new EventEmitter<Task>();
-  editableTask!: Task; // Se crea una copia editable de la tarea
+  editableTask!: Task;
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit() {
-    // Crear una nueva instancia de Task en lugar de usar el spread operator
     this.editableTask = new Task(
       this.task.id,
       this.task.title,
@@ -27,18 +27,19 @@ export class UpdateTaskComponent implements OnInit {
   }
 
   saveTask() {
-    this.taskService.updateTask(this.task.id, {
-      title: this.editableTask.title,
-      categoryId: this.editableTask.categoryId,
-      date: this.editableTask.date,
-    });
-
-    // Emitimos el evento para que la lista de tareas sea actualizada
-    this.taskUpdated.emit(this.editableTask);
+    if (this.allowTaskUpdate) {
+      this.taskService.updateTask(this.task.id, {
+        title: this.editableTask.title,
+        categoryId: this.editableTask.categoryId,
+        date: this.editableTask.date,
+      });
+      this.taskUpdated.emit(this.editableTask);
+    }
   }
 
   clearDate() {
-    // Limpiar la fecha seleccionada
-    this.editableTask.date = null;
+    if (this.allowTaskUpdate) {
+      this.editableTask.date = null;
+    }
   }
 }

@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
   @ViewChild(TasksComponent) tasksComponent!: TasksComponent;
   allowTaskCompletion$: Observable<boolean> | undefined;
   allowTaskDeletion$: Observable<boolean> | undefined;
+  allowTaskUpdate$: Observable<boolean> | undefined;
   showAddTaskButton$: Observable<boolean> | undefined;
   enableCategoryFilter$: Observable<boolean> | undefined;
   filterCategoryId: string = '';
@@ -31,6 +32,7 @@ export class HomePage implements OnInit {
     this.remoteConfigService.activateRemoteConfig().subscribe(() => {
       this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$('allowTaskCompletion');
       this.allowTaskDeletion$ = this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
+      this.allowTaskUpdate$ = this.remoteConfigService.getBooleanValue$('allowTaskUpdate');
       this.showAddTaskButton$ = this.remoteConfigService.getBooleanValue$('showAddTaskButton');
       this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$('enableCategoryFilter');
     });

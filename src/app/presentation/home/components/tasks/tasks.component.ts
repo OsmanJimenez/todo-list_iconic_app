@@ -15,6 +15,8 @@ export class TasksComponent implements OnInit {
 
   @Input() filterCategoryId: string = '';
   @Input() allowTaskDeletion: boolean | null = null;
+  @Input() allowTaskUpdate: boolean | null = null;
+
   isEditTaskModalOpen = false; // Estado para el modal
   selectedTask!: Task; // Tarea seleccionada para editar
   page: number = 0;

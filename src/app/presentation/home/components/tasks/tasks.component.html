@@ -50,10 +50,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <app-update-task
-        [task]="selectedTask"
-        (taskUpdated)="onTaskUpdated($event)"
-      ></app-update-task>
+      <app-update-task [task]="selectedTask" [allowTaskUpdate]="allowTaskUpdate" (taskUpdated)="onTaskUpdated($event)"></app-update-task>
     </ion-content>
   </ng-template>
 </ion-modal>
