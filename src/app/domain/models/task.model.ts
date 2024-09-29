@@ -1,3 +1,5 @@
+import { TaskStatus } from './task-status.enum';
+
 export class Task {
   constructor(
     public readonly id: string,
@@ -10,11 +12,4 @@ export class Task {
   setStatus(newStatus: TaskStatus): void {
     this.status = newStatus;
   }
-}
-
-export enum TaskStatus {
-  Pending = 'PENDING',
-  InProgress = 'IN_PROGRESS',
-  Completed = 'COMPLETED',
-  Canceled = 'CANCELED',
 }

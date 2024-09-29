@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { Task, TaskStatus } from '../../domain/models/task.model';
+import { Task } from '../../domain/models/task.model';
 import { TaskRepository } from '../ports/task.repository';
 import { TASK_REPOSITORY_TOKEN } from '../ports/task-repository.token';
+import { TaskStatus } from '../../domain/models/task-status.enum';
 
 @Injectable({
   providedIn: 'root',

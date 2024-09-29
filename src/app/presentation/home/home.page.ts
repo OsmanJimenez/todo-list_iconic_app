@@ -22,21 +22,21 @@ export class HomePage implements OnInit {
   }
 
   loadTasks() {
-    this.tasksComponent.loadTasks(); // Actualiza el componente de tareas
+    this.tasksComponent.loadTasks();
   }
 
   addTask(taskData: { title: string; categoryId?: string }) {
     this.taskService.addTask(taskData.title, taskData.categoryId);
-    this.loadTasks(); // Cargar las tareas actualizadas
+    this.loadTasks();
   }
 
   toggleCompletion(task: Task) {
     this.taskService.toggleTaskCompletion(task);
-    this.loadTasks(); // Actualiza la lista de tareas
+    this.loadTasks();
   }
 
   deleteTask(taskId: string) {
     this.taskService.deleteTask(taskId);
-    this.loadTasks(); // Actualiza la lista después de eliminar la tarea
+    this.loadTasks();
   }
 }
