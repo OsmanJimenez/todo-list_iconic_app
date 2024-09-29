@@ -10,8 +10,13 @@ import { TaskStatus } from '../../domain/models/task-status.enum';
 export class TaskService {
   constructor(@Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository) {}
 
-  addTask(title: string, categoryId?: string, status: TaskStatus = TaskStatus.Pending): Task {
-    const newTask = new Task(this.generateId(), title, status, categoryId, new Date());
+  addTask(
+    title: string,
+    categoryId?: string,
+    status: TaskStatus = TaskStatus.Pending,
+    date?: string,
+  ): Task {
+    const newTask = new Task(this.generateId(), title, status, categoryId, new Date(), date);
     this.taskRepository.save(newTask);
     return newTask;
   }

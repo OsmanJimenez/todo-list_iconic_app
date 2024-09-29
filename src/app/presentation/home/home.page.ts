@@ -3,8 +3,8 @@ import { TaskService } from '../../application/services/task.service';
 import { Task } from '../../domain/models/task.model';
 import { HOME_CONFIG } from './home.config';
 import { TasksComponent } from './components/tasks/tasks.component';
-import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
 import { Observable } from 'rxjs';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
 
 @Component({
   selector: 'app-home',
@@ -18,14 +18,21 @@ export class HomePage implements OnInit {
   showAddTaskButton$: Observable<boolean> | undefined;
   enableCategoryFilter$: Observable<boolean> | undefined;
   filterCategoryId: string = '';
+  isModalOpen = false;
   config = HOME_CONFIG;
 
   constructor(
     private taskService: TaskService,
     private remoteConfigService: RemoteConfigService
   ) {}
+
   ngOnInit() {
-    this.loadRemoteConfig();
+    this.remoteConfigService.activateRemoteConfig().subscribe(() => {
+      this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$('allowTaskCompletion');
+      this.allowTaskDeletion$ = this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
+      this.showAddTaskButton$ = this.remoteConfigService.getBooleanValue$('showAddTaskButton');
+      this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$('enableCategoryFilter');
+    });
     this.loadTasks();
   }
 
@@ -33,17 +40,15 @@ export class HomePage implements OnInit {
     this.tasksComponent.loadTasks();
   }
 
-  loadRemoteConfig() {
-    this.remoteConfigService.activateRemoteConfig().subscribe(() => {
-      this.allowTaskCompletion$ = this.remoteConfigService.getBooleanValue$('allowTaskCompletion');
-      this.allowTaskDeletion$ = this.remoteConfigService.getBooleanValue$('allowTaskDeletion');
-      this.showAddTaskButton$ = this.remoteConfigService.getBooleanValue$('showAddTaskButton');
-      this.enableCategoryFilter$ = this.remoteConfigService.getBooleanValue$('enableCategoryFilter');
-    });
-  }
-  addTask(taskData: { title: string; categoryId?: string }) {
-    this.taskService.addTask(taskData.title, taskData.categoryId);
+  addTask(taskData: { title: string; categoryId?: string; date?: string}) {
+    this.taskService.addTask(
+      taskData.title,
+      taskData.categoryId,
+      undefined,
+      taskData.date
+    );
     this.loadTasks();
+    this.setOpen(false); // Cierra el modal después de agregar la tarea
   }
 
   toggleCompletion(task: Task) {
@@ -54,5 +59,9 @@ export class HomePage implements OnInit {
   deleteTask(taskId: string) {
     this.taskService.deleteTask(taskId);
     this.loadTasks();
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 }

@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { ADD_TASK_CONFIG } from './add-task.config';
-import { EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { IonDatetime } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-task',
@@ -10,17 +9,28 @@ import { EventEmitter, Output } from '@angular/core';
 export class AddTaskComponent {
   newTaskTitle: string = '';
   newTaskCategoryId: string = '';
+  newTaskDate: string | null = null; // Campo opcional para la fecha
 
-  config = ADD_TASK_CONFIG;
-
-  @Output() addTask = new EventEmitter<{ title: string; categoryId?: string }>();
+  @Output() addTask = new EventEmitter<{
+    title: string;
+    categoryId?: string;
+    date?: string;
+  }>();
 
   onAddTask() {
     if (this.newTaskTitle.trim()) {
-      const categoryId = this.newTaskCategoryId || undefined;
-      this.addTask.emit({ title: this.newTaskTitle, categoryId });
-      this.newTaskTitle = '';
-      this.newTaskCategoryId = '';
+      this.addTask.emit({
+        title: this.newTaskTitle,
+        categoryId: this.newTaskCategoryId || '',
+        date: this.newTaskDate || undefined,
+      });
+      this.resetForm();
     }
+  }
+
+  resetForm() {
+    this.newTaskTitle = '';
+    this.newTaskCategoryId = '';
+    this.newTaskDate = null;
   }
 }

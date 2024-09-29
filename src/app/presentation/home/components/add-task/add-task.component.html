@@ -1,5 +1,31 @@
 <ion-item>
-  <ion-input placeholder="{{ config.TEXTS.TASK_TITLE_PLACEHOLDER }}" [(ngModel)]="newTaskTitle"></ion-input>
-  <ion-input placeholder="{{ config.TEXTS.CATEGORY_ID_PLACEHOLDER }}" [(ngModel)]="newTaskCategoryId"></ion-input>
-  <ion-button (click)="onAddTask()">{{ config.BUTTONS.ADD_TASK.TEXT }}</ion-button>
+  <ion-input
+    placeholder="Título de la tarea"
+    [(ngModel)]="newTaskTitle"
+  ></ion-input>
 </ion-item>
+
+<ion-item>
+  <ion-input
+    placeholder="ID de la categoría (opcional)"
+    [(ngModel)]="newTaskCategoryId"
+  ></ion-input>
+</ion-item>
+
+<!-- Selección de la fecha (solo fecha, sin hora) -->
+<ion-item>
+  <ion-label>Fecha (opcional)</ion-label>
+  <ion-datetime-button datetime="datePicker"></ion-datetime-button>
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="datePicker"
+        presentation="date"
+        [(ngModel)]="newTaskDate"
+        placeholder="Seleccionar fecha"
+      ></ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ion-item>
+
+<ion-button expand="block" (click)="onAddTask()">Agregar Tarea</ion-button>

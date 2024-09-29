@@ -34,7 +34,14 @@ export class LocalStorageTaskRepository implements TaskRepository {
     return tasks
       ? tasks.map(
           (taskData: any) =>
-            new Task(taskData.id, taskData.title, taskData.status, taskData.categoryId, new Date(taskData.createdAt))
+            new Task(
+              taskData.id,
+              taskData.title,
+              taskData.status,
+              taskData.categoryId,
+              new Date(taskData.createdAt),
+              taskData.date,
+            )
         )
       : [];
   }
