@@ -52,11 +52,17 @@ export class TasksComponent implements OnInit {
   }
 
   applyFilter() {
-    if (this.filterCategoryId.trim() === '') {
+    const query = this.filterCategoryId.trim().toLowerCase();
+
+    if (query === '') {
       this.filteredTasks = this.tasks.slice(0, (this.page + 1) * this.pageSize);
     } else {
       this.filteredTasks = this.tasks
-        .filter(task => task.categoryId === this.filterCategoryId)
+        .filter(task => {
+          const categoryMatch = task.categoryId?.toLowerCase().includes(query);
+          const titleMatch = task.title?.toLowerCase().includes(query);
+          return categoryMatch || titleMatch;
+        })
         .slice(0, (this.page + 1) * this.pageSize);
     }
   }

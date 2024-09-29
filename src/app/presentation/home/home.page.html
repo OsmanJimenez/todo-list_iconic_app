@@ -6,8 +6,15 @@
     </ion-col>
 
     <ion-col size="12" size-md="6" class="button-container">
-      <ion-button (click)="setOpen(true)" *ngIf="showAddTaskButton$ | async" fill="outline" class="new-task-button">
-        <ion-icon slot="start" name="add-circle-outline"></ion-icon> {{ config.BUTTONS.ADD_TASK.TEXT }}
+      <ion-button
+        (click)="setOpen(true)"
+        *ngIf="showAddTaskButton$ | async"
+        fill="outline"
+        color="success"
+        class="new-task-button"
+      >
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        {{ config.BUTTONS.ADD_TASK.TEXT }}
       </ion-button>
     </ion-col>
   </ion-row>
@@ -34,5 +41,6 @@
     *ngIf="enableCategoryFilter$ | async"
     (filterCategory)="filterCategoryId = $event"
   ></app-category-filter>
+
   <app-tasks [filterCategoryId]="filterCategoryId" [allowTaskDeletion]="allowTaskDeletion$ | async"></app-tasks>
 </ion-content>

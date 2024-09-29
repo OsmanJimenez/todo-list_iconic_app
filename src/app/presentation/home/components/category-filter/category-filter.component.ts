@@ -7,13 +7,18 @@ import { CATEGORY_FILTER_CONFIG } from './category-filter.config';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent {
-  filterCategoryId: string = '';
+  filterQuery: string = '';
 
   config = CATEGORY_FILTER_CONFIG;
 
   @Output() filterCategory = new EventEmitter<string>();
 
   onFilterChange() {
-    this.filterCategory.emit(this.filterCategoryId);
+    this.filterCategory.emit(this.filterQuery.trim().toLowerCase());
+  }
+
+  clearFilter() {
+    this.filterQuery = '';
+    this.onFilterChange();
   }
 }
