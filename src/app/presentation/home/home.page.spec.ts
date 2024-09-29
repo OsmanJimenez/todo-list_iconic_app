@@ -80,21 +80,21 @@ describe('HomePage', () => {
       Then should call loadTasks and loadRemoteConfig`, () => {
     // Arrange
     jest.spyOn(component, 'loadTasks');
-    jest.spyOn(component, 'loadRemoteConfig');
+    jest.spyOn(component, 'ngOnInit');
 
     // Act
     component.ngOnInit();
 
     // Assert
     expect(component.loadTasks).toHaveBeenCalled();
-    expect(component.loadRemoteConfig).toHaveBeenCalled();
+    expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
   });
 
   it(`Given remote config is activated,
       When loadRemoteConfig is called,
       Then it should initialize remote config observables`, () => {
     // Act
-    component.loadRemoteConfig();
+    component.ngOnInit();
 
     // Assert
     expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
@@ -102,8 +102,6 @@ describe('HomePage', () => {
     expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskDeletion');
     expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('showAddTaskButton');
     expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('enableCategoryFilter');
-
-    // Check if observables are initialized
     expect(component.allowTaskCompletion$).toBeDefined();
     expect(component.allowTaskDeletion$).toBeDefined();
     expect(component.showAddTaskButton$).toBeDefined();
@@ -114,14 +112,14 @@ describe('HomePage', () => {
       When addTask is called,
       Then should call taskService.addTask and reload tasks`, () => {
     // Arrange
-    const taskData = { title: 'New Task', categoryId: '123' };
+    const taskData = { title: 'New Task', categoryId: '123', date: '2024-09-30' };
     jest.spyOn(component, 'loadTasks');
 
     // Act
     component.addTask(taskData);
 
     // Assert
-    expect(taskServiceMock.addTask).toHaveBeenCalledWith(taskData.title, taskData.categoryId);
+    expect(taskServiceMock.addTask).toHaveBeenCalledWith(taskData.title, taskData.categoryId, undefined, taskData.date);
     expect(component.loadTasks).toHaveBeenCalled();
   });
 

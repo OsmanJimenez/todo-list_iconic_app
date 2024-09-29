@@ -20,6 +20,7 @@ export class HomePage implements OnInit {
   filterCategoryId: string = '';
   isModalOpen = false;
   config = HOME_CONFIG;
+  currentDate: Date = new Date();
 
   constructor(
     private taskService: TaskService,
@@ -40,15 +41,10 @@ export class HomePage implements OnInit {
     this.tasksComponent.loadTasks();
   }
 
-  addTask(taskData: { title: string; categoryId?: string; date?: string}) {
-    this.taskService.addTask(
-      taskData.title,
-      taskData.categoryId,
-      undefined,
-      taskData.date
-    );
+  addTask(taskData: { title: string; categoryId?: string; date?: string }) {
+    this.taskService.addTask(taskData.title, taskData.categoryId, undefined, taskData.date);
     this.loadTasks();
-    this.setOpen(false); // Cierra el modal después de agregar la tarea
+    this.setOpen(false);
   }
 
   toggleCompletion(task: Task) {

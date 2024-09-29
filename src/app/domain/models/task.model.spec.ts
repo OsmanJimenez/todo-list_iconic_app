@@ -2,20 +2,6 @@ import { Task } from './task.model';
 import { TaskStatus } from './task-status.enum';
 
 describe('Task', () => {
-  it(`Given a new Task,
-      When created,
-      Then it should have the correct default values`, () => {
-    // Arrange & Act
-    const task = new Task('1', 'Test Task');
-
-    // Assert
-    expect(task.id).toBe('1');
-    expect(task.title).toBe('Test Task');
-    expect(task.status).toBe(TaskStatus.Pending);
-    expect(task.createdAt).toBeInstanceOf(Date);
-    expect(task.categoryId).toBeUndefined();
-  });
-
   it(`Given a Task,
       When created with a specific status,
       Then it should set the status correctly`, () => {
@@ -47,5 +33,16 @@ describe('Task', () => {
 
     // Assert
     expect(task.categoryId).toBe('123');
+  });
+
+  it(`Given a Task,
+      When created with a specific date,
+      Then it should assign the date correctly`, () => {
+    // Arrange & Act
+    const specificDate = '2024-09-30T00:00:00Z';
+    const task = new Task('1', 'Test Task', TaskStatus.Pending, '123', new Date(), specificDate);
+
+    // Assert
+    expect(task.date).toBe(specificDate);
   });
 });

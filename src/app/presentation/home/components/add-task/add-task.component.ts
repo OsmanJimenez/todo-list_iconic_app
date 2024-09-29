@@ -33,4 +33,8 @@ export class AddTaskComponent {
     this.newTaskCategoryId = '';
     this.newTaskDate = null;
   }
+
+  clearDate() {
+    this.newTaskDate = null;
+  }
 }
