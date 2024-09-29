@@ -10,7 +10,7 @@ export class TaskService {
   constructor(@Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository) {}
 
   addTask(title: string, categoryId?: string): Task {
-    const newTask = new Task(this.generateId(), title, false, categoryId);
+    const newTask = new Task(this.generateId(), title, false, categoryId, new Date());
     this.taskRepository.save(newTask);
     return newTask;
   }
@@ -25,7 +25,7 @@ export class TaskService {
   }
 
   getTasks(): Task[] {
-    return this.taskRepository.findAll();
+    return this.taskRepository.findAll().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   private generateId(): string {
