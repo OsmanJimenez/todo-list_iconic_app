@@ -10,12 +10,7 @@ import { TaskStatus } from '../../domain/models/task-status.enum';
 export class TaskService {
   constructor(@Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository) {}
 
-  addTask(
-    title: string,
-    categoryId?: string,
-    status: TaskStatus = TaskStatus.Pending,
-    date?: string,
-  ): Task {
+  addTask(title: string, categoryId?: string, status: TaskStatus = TaskStatus.Pending, date?: string): Task {
     const newTask = new Task(this.generateId(), title, status, categoryId, new Date(), date);
     this.taskRepository.save(newTask);
     return newTask;
@@ -33,6 +28,16 @@ export class TaskService {
     }
 
     this.taskRepository.save(task);
+  }
+
+  updateTask(taskId: string, updatedData: Partial<Task>): Task | undefined {
+    const task = this.taskRepository.findById(taskId);
+    if (task) {
+      Object.assign(task, updatedData);
+      this.taskRepository.save(task);
+      return task;
+    }
+    return undefined;
   }
 
   getTasks(page: number, pageSize: number): Task[] {

@@ -15,7 +15,8 @@ export class TasksComponent implements OnInit {
 
   @Input() filterCategoryId: string = '';
   @Input() allowTaskDeletion: boolean | null = null;
-
+  isEditTaskModalOpen = false; // Estado para el modal
+  selectedTask!: Task; // Tarea seleccionada para editar
   page: number = 0;
   pageSize: number = 20;
   totalTasks: number = 0;
@@ -77,5 +78,27 @@ export class TasksComponent implements OnInit {
       this.taskService.deleteTask(taskId);
       this.loadTasks();
     }
+  }
+
+  // Abrir el modal de edición
+  openEditTaskModal(task: Task) {
+    // Crear una nueva instancia de Task en lugar de usar el spread operator
+    this.selectedTask = new Task(task.id, task.title, task.status, task.categoryId, task.createdAt, task.date);
+    this.isEditTaskModalOpen = true;
+  }
+
+  // Cerrar el modal de edición
+  closeEditTaskModal() {
+    this.isEditTaskModalOpen = false;
+  }
+
+  // Actualizar tarea
+  onTaskUpdated(updatedTask: Task) {
+    const index = this.tasks.findIndex(task => task.id === updatedTask.id);
+    if (index !== -1) {
+      this.tasks[index] = updatedTask;
+    }
+    this.applyFilter();
+    this.closeEditTaskModal();
   }
 }

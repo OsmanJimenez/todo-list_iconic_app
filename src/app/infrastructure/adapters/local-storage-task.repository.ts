@@ -40,9 +40,13 @@ export class LocalStorageTaskRepository implements TaskRepository {
               taskData.status,
               taskData.categoryId,
               new Date(taskData.createdAt),
-              taskData.date,
+              taskData.date
             )
         )
       : [];
+  }
+
+  findById(taskId: string): Task | undefined {
+    return this.findAll().find(task => task.id === taskId);
   }
 }

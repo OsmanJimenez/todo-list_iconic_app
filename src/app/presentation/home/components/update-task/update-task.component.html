@@ -1,0 +1,40 @@
+<ion-item>
+  <ion-input
+    placeholder="Título de la tarea"
+    [(ngModel)]="editableTask.title"
+  ></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-input
+    placeholder="ID de la categoría (opcional)"
+    [(ngModel)]="editableTask.categoryId"
+  ></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label>Fecha (opcional)</ion-label>
+  <ion-datetime-button datetime="datePicker" [ngClass]="{ 'empty-date': !editableTask.date }"></ion-datetime-button>
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="datePicker"
+        presentation="date"
+        [(ngModel)]="editableTask.date"
+        placeholder="Seleccionar fecha"
+      ></ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+  <ion-button *ngIf="editableTask.date" fill="clear" (click)="clearDate()">
+    <ion-icon name="close-circle"></ion-icon>
+  </ion-button>
+</ion-item>
+
+<ion-item>
+  <ion-label>Fecha seleccionada: </ion-label>
+  <span *ngIf="editableTask.date">{{ editableTask.date | date: 'mediumDate' }}</span>
+  <span *ngIf="!editableTask.date">No se ha seleccionado ninguna fecha</span>
+</ion-item>
+
+<ion-button expand="block" (click)="saveTask()">Guardar Tarea</ion-button>
