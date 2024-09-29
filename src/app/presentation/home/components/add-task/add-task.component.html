@@ -1,0 +1,5 @@
+<ion-item>
+  <ion-input placeholder="{{ config.TEXTS.TASK_TITLE_PLACEHOLDER }}" [(ngModel)]="newTaskTitle"></ion-input>
+  <ion-input placeholder="{{ config.TEXTS.CATEGORY_ID_PLACEHOLDER }}" [(ngModel)]="newTaskCategoryId"></ion-input>
+  <ion-button (click)="onAddTask()">{{ config.BUTTONS.ADD_TASK.TEXT }}</ion-button>
+</ion-item>

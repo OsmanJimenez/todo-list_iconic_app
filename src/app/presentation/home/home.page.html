@@ -5,36 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-item *ngIf="showAddTaskButton$ | async">
-    <ion-input [placeholder]="config.TEXTS.TASK_TITLE_PLACEHOLDER" [(ngModel)]="newTaskTitle"></ion-input>
-    <ion-input [placeholder]="config.TEXTS.CATEGORY_ID_PLACEHOLDER" [(ngModel)]="newTaskCategoryId"></ion-input>
-    <ion-button (click)="addTask()">{{ config.BUTTONS.ADD_TASK.TEXT }}</ion-button>
-  </ion-item>
-
-  <ion-item *ngIf="enableCategoryFilter$ | async">
-    <ion-label>{{ config.TEXTS.FILTER_CATEGORY_PLACEHOLDER }}</ion-label>
-    <ion-input [placeholder]="config.TEXTS.FILTER_INPUT_CATEGORY_PLACEHOLDER" [(ngModel)]="filterCategoryId"></ion-input>
-  </ion-item>
-
-  <ion-list>
-    <ion-item *ngFor="let task of getFilteredTasks()">
-      <ion-label [class.completed]="task.completed">
-        {{ task.title }} ({{ task.categoryId || config.TEXTS.NO_CATEGORY_TEXT }})
-      </ion-label>
-      <ion-checkbox
-        [attr.slot]="config.CHECKBOX.COMPLETION.SLOT"
-        [(ngModel)]="task.completed"
-        (ionChange)="toggleCompletion(task)"
-        *ngIf="allowTaskCompletion$ | async"
-      ></ion-checkbox>
-      <ion-button
-        [attr.slot]="config.BUTTONS.DELETE_TASK.SLOT"
-        [color]="config.BUTTONS.DELETE_TASK.COLOR"
-        (click)="deleteTask(task.id)"
-        *ngIf="allowTaskDeletion$ | async"
-      >
-        {{ config.BUTTONS.DELETE_TASK.TEXT }}
-      </ion-button>
-    </ion-item>
-  </ion-list>
+  <app-add-task (addTask)="addTask($event)"></app-add-task>
+  <app-category-filter (filterCategory)="filterCategoryId = $event"></app-category-filter>
+  <app-tasks [filterCategoryId]="filterCategoryId"></app-tasks>
 </ion-content>

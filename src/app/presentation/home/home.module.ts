@@ -5,9 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { AddTaskComponent } from './components/add-task/add-task.component';
+import { CategoryFilterComponent } from './components/category-filter/category-filter.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule],
-  declarations: [HomePage],
+  declarations: [HomePage, TasksComponent, AddTaskComponent, CategoryFilterComponent],
 })
 export class HomePageModule {}
