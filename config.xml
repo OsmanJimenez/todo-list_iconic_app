@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.todoapp.manager" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>TodoApp Manager</name>
-    <description>Gestiona tus tareas diarias de manera eficiente con TodoApp Manager.</description>
+    <description>Gestiona tus actividades diarias de manera eficiente con TodoApp Manager.</description>
     <author email="osmanjimenez.dev@gmail.com" href="https://osman-jimenez.web.app/">Osman Jimenez</author>
     <content src="index.html" />
     <access origin="*" />

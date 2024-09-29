@@ -1,11 +1,11 @@
 export const HOME_CONFIG = Object.freeze({
   TEXTS: {
     WELCOME: 'Bienvenido',
-    TASK_TITLE_PLACEHOLDER: 'Título de la Tarea',
+    TASK_TITLE_PLACEHOLDER: 'Ingresa la Actividad',
   },
   BUTTONS: {
     ADD_TASK: {
-      TEXT: 'Nueva Tarea',
+      TEXT: 'Nueva Actividad',
     },
   },
 });

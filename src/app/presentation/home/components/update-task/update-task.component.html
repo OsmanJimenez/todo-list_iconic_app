@@ -1,6 +1,7 @@
 <ion-item>
   <ion-input
-    placeholder="Título de la tarea"
+    label="Actividad"
+    placeholder="Ingresa la actividad"
     [(ngModel)]="editableTask.title"
     [disabled]="!allowTaskUpdate"
   ></ion-input>
@@ -8,12 +9,12 @@
 
 <ion-item>
   <ion-input
-    placeholder="ID de la categoría (opcional)"
+    label="Categoría"
+    placeholder="Ingresa la categoría (opcional)"
     [(ngModel)]="editableTask.categoryId"
     [disabled]="!allowTaskUpdate"
   ></ion-input>
 </ion-item>
-
 <ion-item>
   <ion-label>Fecha (opcional)</ion-label>
   <ion-datetime-button
@@ -44,4 +45,6 @@
   <span *ngIf="!editableTask.date">No se ha seleccionado ninguna fecha</span>
 </ion-item>
 
-<ion-button expand="block" (click)="saveTask()" [disabled]="!allowTaskUpdate">Guardar Tarea</ion-button>
+<ion-button expand="block" color="success" (click)="saveTask()" [disabled]="!allowTaskUpdate"
+  >Guardar Actividad</ion-button
+>

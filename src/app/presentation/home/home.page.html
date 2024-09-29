@@ -21,14 +21,13 @@
 </ion-grid>
 
 <ion-content>
-  <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="setOpen(false)">
+  <ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="setOpen(false)" class="custom-modal">
     <ng-template>
       <ion-header>
-        <ion-toolbar>
-          <ion-title>{{ config.TEXTS.TASK_TITLE_PLACEHOLDER }}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="setOpen(false)">Cerrar</ion-button>
-          </ion-buttons>
+        <ion-toolbar class="no-shadow-toolbar">
+          <ion-button color="danger" fill="clear" slot="end" (click)="setOpen(false)">
+            <ion-icon slot="icon-only" name="close-circle-outline" ></ion-icon>
+          </ion-button>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -42,5 +41,9 @@
     (filterCategory)="filterCategoryId = $event"
   ></app-category-filter>
 
-  <app-tasks [filterCategoryId]="filterCategoryId" [allowTaskDeletion]="allowTaskDeletion$ | async" [allowTaskUpdate]="allowTaskUpdate$ | async"></app-tasks>
+  <app-tasks
+    [filterCategoryId]="filterCategoryId"
+    [allowTaskDeletion]="allowTaskDeletion$ | async"
+    [allowTaskUpdate]="allowTaskUpdate$ | async"
+  ></app-tasks>
 </ion-content>

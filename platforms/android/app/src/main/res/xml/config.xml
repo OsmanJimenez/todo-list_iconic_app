@@ -4,7 +4,7 @@
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
     <name>TodoApp Manager</name>
-    <description>Gestiona tus tareas diarias de manera eficiente con TodoApp Manager.</description>
+    <description>Gestiona tus actividades diarias de manera eficiente con TodoApp Manager.</description>
     <author email="osmanjimenez.dev@gmail.com" href="https://osman-jimenez.web.app/">Osman Jimenez</author>
     <content src="index.html" />
     <access origin="*" />

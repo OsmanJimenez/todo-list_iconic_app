@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TaskService } from '../../../../application/services/task.service';
 import { Task } from '../../../../domain/models/task.model';
 import { TASKS_CONFIG } from './tasks.config';
+import { AlertController } from '@ionic/angular'; // Importa el controlador de alertas
 
 @Component({
   selector: 'app-tasks',
@@ -17,13 +18,16 @@ export class TasksComponent implements OnInit {
   @Input() allowTaskDeletion: boolean | null = null;
   @Input() allowTaskUpdate: boolean | null = null;
 
-  isEditTaskModalOpen = false; // Estado para el modal
-  selectedTask!: Task; // Tarea seleccionada para editar
+  isEditTaskModalOpen = false;
+  selectedTask!: Task;
   page: number = 0;
   pageSize: number = 20;
   totalTasks: number = 0;
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private alertController: AlertController
+  ) {} // Añade el AlertController
 
   ngOnInit() {
     this.loadTasks();
@@ -75,6 +79,32 @@ export class TasksComponent implements OnInit {
     this.loadTasks();
   }
 
+  async presentDeleteConfirm(task: Task) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Eliminación',
+      message: `¿Estás seguro de que deseas eliminar la Actividad "${task.title}" en la categoría "${task.categoryId || 'Sin Categoría'}"?`,
+      cssClass: 'custom-alert', // Clase personalizada para agregar estilos
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          },
+        },
+        {
+          text: 'Eliminar',
+          role: 'confirm',
+          handler: () => {
+            this.deleteTask(task.id);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
   deleteTask(taskId: string) {
     if (this.allowTaskDeletion) {
       this.taskService.deleteTask(taskId);
@@ -82,19 +112,15 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  // Abrir el modal de edición
   openEditTaskModal(task: Task) {
-    // Crear una nueva instancia de Task en lugar de usar el spread operator
     this.selectedTask = new Task(task.id, task.title, task.status, task.categoryId, task.createdAt, task.date);
     this.isEditTaskModalOpen = true;
   }
 
-  // Cerrar el modal de edición
   closeEditTaskModal() {
     this.isEditTaskModalOpen = false;
   }
 
-  // Actualizar tarea
   onTaskUpdated(updatedTask: Task) {
     const index = this.tasks.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {

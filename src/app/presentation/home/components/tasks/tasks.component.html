@@ -1,7 +1,6 @@
 <ion-grid>
   <ion-row>
     <ion-col size="12" size-md="6" size-lg="4" *ngFor="let task of filteredTasks">
-      <!-- Al hacer clic, abre el modal de edición de tareas -->
       <ion-card class="task-card" (click)="openEditTaskModal(task)">
         <ion-card-content>
           <div class="task-content">
@@ -24,7 +23,7 @@
             <p class="task-date">{{ task.date | date }}</p>
             <ion-button
               *ngIf="allowTaskDeletion"
-              (click)="deleteTask(task.id); $event.stopPropagation()"
+              (click)="presentDeleteConfirm(task); $event.stopPropagation()"
               color="danger"
               fill="clear"
               class="delete-button"
@@ -38,19 +37,21 @@
   </ion-row>
 </ion-grid>
 
-<!-- Modal para editar la tarea seleccionada -->
-<ion-modal [isOpen]="isEditTaskModalOpen" (ionModalDidDismiss)="closeEditTaskModal()" cssClass="full-height-modal">
+<ion-modal [isOpen]="isEditTaskModalOpen" (ionModalDidDismiss)="closeEditTaskModal()" class="custom-modal">
   <ng-template>
     <ion-header>
-      <ion-toolbar>
-        <ion-title>Actualizar Tarea</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeEditTaskModal()">Cerrar</ion-button>
-        </ion-buttons>
+      <ion-toolbar class="no-shadow-toolbar">
+        <ion-button color="danger" fill="clear" slot="end" (click)="closeEditTaskModal()">
+          <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+        </ion-button>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <app-update-task [task]="selectedTask" [allowTaskUpdate]="allowTaskUpdate" (taskUpdated)="onTaskUpdated($event)"></app-update-task>
+      <app-update-task
+        [task]="selectedTask"
+        [allowTaskUpdate]="allowTaskUpdate"
+        (taskUpdated)="onTaskUpdated($event)"
+      ></app-update-task>
     </ion-content>
   </ng-template>
 </ion-modal>

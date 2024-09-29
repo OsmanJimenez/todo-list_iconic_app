@@ -1,34 +1,40 @@
-<ion-item>
-  <ion-input placeholder="Título de la tarea" [(ngModel)]="newTaskTitle"></ion-input>
-</ion-item>
+<div class="add-task">
+  <ion-item>
+    <ion-input label="Actividad" placeholder="Ingresa la actividad" [(ngModel)]="newTaskTitle"></ion-input>
+  </ion-item>
 
-<ion-item>
-  <ion-input placeholder="ID de la categoría (opcional)" [(ngModel)]="newTaskCategoryId"></ion-input>
-</ion-item>
+  <ion-item>
+    <ion-input
+      label="Categoría"
+      placeholder="Ingresa la categoría (opcional)"
+      [(ngModel)]="newTaskCategoryId"
+    ></ion-input>
+  </ion-item>
 
-<ion-item>
-  <ion-label>Fecha (opcional)</ion-label>
-  <ion-datetime-button datetime="datePicker" [ngClass]="{ 'empty-date': !newTaskDate }"></ion-datetime-button>
-  <ion-modal [keepContentsMounted]="true">
-    <ng-template>
-      <ion-datetime
-        id="datePicker"
-        presentation="date"
-        [(ngModel)]="newTaskDate"
-        placeholder="Seleccionar fecha"
-      ></ion-datetime>
-    </ng-template>
-  </ion-modal>
+  <ion-item>
+    <ion-label>Fecha (opcional)</ion-label>
+    <ion-datetime-button datetime="datePicker" [ngClass]="{ 'empty-date': !newTaskDate }"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime
+          id="datePicker"
+          presentation="date"
+          [(ngModel)]="newTaskDate"
+          placeholder="Seleccionar fecha"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
 
-  <ion-button *ngIf="newTaskDate" fill="clear" (click)="clearDate()">
-    <ion-icon name="close-circle"></ion-icon>
-  </ion-button>
-</ion-item>
+    <ion-button *ngIf="newTaskDate" fill="clear" (click)="clearDate()">
+      <ion-icon name="close-circle"></ion-icon>
+    </ion-button>
+  </ion-item>
 
-<ion-item>
-  <ion-label>Fecha seleccionada: </ion-label>
-  <span *ngIf="newTaskDate">{{ newTaskDate | date: 'mediumDate' }}</span>
-  <span *ngIf="!newTaskDate">No se ha seleccionado ninguna fecha</span>
-</ion-item>
+  <ion-item>
+    <ion-label>Fecha seleccionada: </ion-label>
+    <span *ngIf="newTaskDate" class="date-text">{{ newTaskDate | date: 'mediumDate' }}</span>
+    <span *ngIf="!newTaskDate" class="date-text">No se ha seleccionado ninguna fecha</span>
+  </ion-item>
 
-<ion-button expand="block" (click)="onAddTask()">Agregar Tarea</ion-button>
+  <ion-button expand="block" color="success" (click)="onAddTask()">Agregar Actividad</ion-button>
+</div>

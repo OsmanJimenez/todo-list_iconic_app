@@ -36,6 +36,15 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-button#date-button {
-  color: blue !important;
+.no-shadow-toolbar {
+  --box-shadow: none;
+}
+
+.custom-modal {
+  --border-radius: 10px;
+}
+
+ion-modal {
+  --max-height: 320px;
+  padding: 20px;
 }
