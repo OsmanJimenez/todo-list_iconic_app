@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Task } from '../../domain/models/task.model';
+import { Task, TaskStatus } from '../../domain/models/task.model';
 import { TaskRepository } from '../ports/task.repository';
 import { TASK_REPOSITORY_TOKEN } from '../ports/task-repository.token';
 
@@ -9,8 +9,8 @@ import { TASK_REPOSITORY_TOKEN } from '../ports/task-repository.token';
 export class TaskService {
   constructor(@Inject(TASK_REPOSITORY_TOKEN) private taskRepository: TaskRepository) {}
 
-  addTask(title: string, categoryId?: string): Task {
-    const newTask = new Task(this.generateId(), title, false, categoryId, new Date());
+  addTask(title: string, categoryId?: string, status: TaskStatus = TaskStatus.Pending): Task {
+    const newTask = new Task(this.generateId(), title, status, categoryId, new Date());
     this.taskRepository.save(newTask);
     return newTask;
   }
@@ -20,13 +20,17 @@ export class TaskService {
   }
 
   toggleTaskCompletion(task: Task): void {
-    task.toggleCompletion();
+    if (task.status === TaskStatus.Completed) {
+      task.setStatus(TaskStatus.Pending);
+    } else {
+      task.setStatus(TaskStatus.Completed);
+    }
+
     this.taskRepository.save(task);
   }
 
   getTasks(page: number, pageSize: number): Task[] {
     const tasks = this.taskRepository.findAll().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
     const start = page * pageSize;
     const end = start + pageSize;
     return tasks.slice(start, end);

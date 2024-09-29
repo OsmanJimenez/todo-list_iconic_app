@@ -14,4 +14,10 @@ export const TASKS_CONFIG = Object.freeze({
       SLOT: 'start',
     },
   },
+  STATUSES: {
+    PENDING: 'PENDING',
+    IN_PROGRESS: 'IN_PROGRESS',
+    COMPLETED: 'COMPLETED',
+    CANCELED: 'CANCELED',
+  },
 });

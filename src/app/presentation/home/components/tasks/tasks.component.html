@@ -1,12 +1,15 @@
 <ion-list>
   <ion-item *ngFor="let task of filteredTasks">
-    <ion-label [class.completed]="task.completed">
+    <ion-label
+      [class.completed]="task.status === config.STATUSES.COMPLETED"
+      [ngClass]="{ 'task-completed': task.status === config.STATUSES.COMPLETED }"
+    >
       {{ task.title }} ({{ task.categoryId || config.TEXTS.NO_CATEGORY_TEXT }})
     </ion-label>
     <ion-checkbox
-      [attr.slot]="config.CHECKBOX.COMPLETION.SLOT"
-      [(ngModel)]="task.completed"
+      [checked]="task.status === config.STATUSES.COMPLETED"
       (ionChange)="toggleCompletion(task)"
+      [attr.slot]="config.CHECKBOX.COMPLETION.SLOT"
     ></ion-checkbox>
     <ion-button
       [attr.slot]="config.BUTTONS.DELETE_TASK.SLOT"

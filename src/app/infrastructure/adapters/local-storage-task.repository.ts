@@ -14,11 +14,13 @@ export class LocalStorageTaskRepository implements TaskRepository {
   save(task: Task): void {
     const tasks = this.findAll();
     const index = tasks.findIndex(t => t.id === task.id);
+
     if (index === -1) {
       tasks.push(task);
     } else {
       tasks[index] = task;
     }
+
     this.storageService.save(this.STORAGE_KEY, tasks);
   }
 
@@ -32,7 +34,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
     return tasks
       ? tasks.map(
           (taskData: any) =>
-            new Task(taskData.id, taskData.title, taskData.completed, taskData.categoryId, new Date(taskData.createdAt))
+            new Task(taskData.id, taskData.title, taskData.status, taskData.categoryId, new Date(taskData.createdAt))
         )
       : [];
   }
