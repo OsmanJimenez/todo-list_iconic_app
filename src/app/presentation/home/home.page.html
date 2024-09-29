@@ -5,7 +5,9 @@
 </ion-header>
 
 <ion-content>
-  <app-add-task (addTask)="addTask($event)"></app-add-task>
-  <app-category-filter (filterCategory)="filterCategoryId = $event"></app-category-filter>
-  <app-tasks [filterCategoryId]="filterCategoryId"></app-tasks>
-</ion-content>
+  <app-add-task *ngIf="showAddTaskButton$ | async" (addTask)="addTask($event)"></app-add-task>
+  <app-category-filter  *ngIf="enableCategoryFilter$ | async"  (filterCategory)="filterCategoryId = $event"></app-category-filter>
+<app-tasks
+    [filterCategoryId]="filterCategoryId"
+    [allowTaskDeletion]="allowTaskDeletion$ | async">
+  </app-tasks></ion-content>

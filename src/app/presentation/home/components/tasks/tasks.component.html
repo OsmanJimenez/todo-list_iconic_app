@@ -12,6 +12,7 @@
       [attr.slot]="config.CHECKBOX.COMPLETION.SLOT"
     ></ion-checkbox>
     <ion-button
+    *ngIf="allowTaskDeletion"
       [attr.slot]="config.BUTTONS.DELETE_TASK.SLOT"
       [color]="config.BUTTONS.DELETE_TASK.COLOR"
       (click)="deleteTask(task.id)"

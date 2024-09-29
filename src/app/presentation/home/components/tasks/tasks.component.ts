@@ -14,6 +14,7 @@ export class TasksComponent implements OnInit {
   config = TASKS_CONFIG;
 
   @Input() filterCategoryId: string = '';
+  @Input() allowTaskDeletion: boolean | null = null;
 
   page: number = 0;
   pageSize: number = 20;
@@ -25,21 +26,24 @@ export class TasksComponent implements OnInit {
     this.loadTasks();
   }
 
+  ngOnChanges() {
+    this.applyFilter();
+  }
+
   loadTasks() {
     this.page = 0;
     this.tasks = this.taskService.getTasks(0, this.pageSize);
-    this.totalTasks = this.getFilteredTasks().length;
+    this.totalTasks = this.tasks.length;
 
-    this.filteredTasks = this.getFilteredTasks().slice(0, this.pageSize);
+    this.applyFilter();
   }
 
   loadMoreTasks(event: any) {
     this.page++;
-
     const nextTasks = this.taskService.getTasks(this.page, this.pageSize);
+    this.tasks = [...this.tasks, ...nextTasks];
 
-    this.filteredTasks = [...this.filteredTasks, ...nextTasks];
-
+    this.applyFilter();
     event.target.complete();
 
     if (this.filteredTasks.length >= this.totalTasks) {
@@ -47,11 +51,14 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  getFilteredTasks(): Task[] {
+  applyFilter() {
     if (this.filterCategoryId.trim() === '') {
-      return this.tasks;
+      this.filteredTasks = this.tasks.slice(0, (this.page + 1) * this.pageSize);
+    } else {
+      this.filteredTasks = this.tasks
+        .filter(task => task.categoryId === this.filterCategoryId)
+        .slice(0, (this.page + 1) * this.pageSize);
     }
-    return this.tasks.filter(task => task.categoryId === this.filterCategoryId);
   }
 
   toggleCompletion(task: Task) {
@@ -60,7 +67,9 @@ export class TasksComponent implements OnInit {
   }
 
   deleteTask(taskId: string) {
-    this.taskService.deleteTask(taskId);
-    this.loadTasks();
+    if (this.allowTaskDeletion) {
+      this.taskService.deleteTask(taskId);
+      this.loadTasks();
+    }
   }
 }
