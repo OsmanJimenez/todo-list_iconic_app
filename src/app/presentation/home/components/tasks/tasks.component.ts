@@ -10,9 +10,14 @@ import { TASKS_CONFIG } from './tasks.config';
 })
 export class TasksComponent implements OnInit {
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
   config = TASKS_CONFIG;
 
   @Input() filterCategoryId: string = '';
+
+  page: number = 0;
+  pageSize: number = 20;
+  totalTasks: number = 0;
 
   constructor(private taskService: TaskService) {}
 
@@ -21,7 +26,25 @@ export class TasksComponent implements OnInit {
   }
 
   loadTasks() {
-    this.tasks = this.taskService.getTasks();
+    this.page = 0;
+    this.tasks = this.taskService.getTasks(0, this.pageSize);
+    this.totalTasks = this.getFilteredTasks().length;
+
+    this.filteredTasks = this.getFilteredTasks().slice(0, this.pageSize);
+  }
+
+  loadMoreTasks(event: any) {
+    this.page++;
+
+    const nextTasks = this.taskService.getTasks(this.page, this.pageSize);
+
+    this.filteredTasks = [...this.filteredTasks, ...nextTasks];
+
+    event.target.complete();
+
+    if (this.filteredTasks.length >= this.totalTasks) {
+      event.target.disabled = true;
+    }
   }
 
   getFilteredTasks(): Task[] {

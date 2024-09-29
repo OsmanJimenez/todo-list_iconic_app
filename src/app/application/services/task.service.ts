@@ -24,8 +24,12 @@ export class TaskService {
     this.taskRepository.save(task);
   }
 
-  getTasks(): Task[] {
-    return this.taskRepository.findAll().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  getTasks(page: number, pageSize: number): Task[] {
+    const tasks = this.taskRepository.findAll().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    const start = page * pageSize;
+    const end = start + pageSize;
+    return tasks.slice(start, end);
   }
 
   private generateId(): string {

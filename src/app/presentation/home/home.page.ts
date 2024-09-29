@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../application/services/task.service';
 import { Task } from '../../domain/models/task.model';
 import { HOME_CONFIG } from './home.config';
@@ -12,37 +12,31 @@ import { TasksComponent } from './components/tasks/tasks.component';
 export class HomePage implements OnInit {
   @ViewChild(TasksComponent) tasksComponent!: TasksComponent;
 
-  tasks: Task[] = [];
   filterCategoryId: string = '';
-
   config = HOME_CONFIG;
 
-  constructor(
-    private taskService: TaskService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
     this.loadTasks();
   }
 
   loadTasks() {
-    this.tasks = this.taskService.getTasks();
-    this.cdr.detectChanges();
+    this.tasksComponent.loadTasks(); // Actualiza el componente de tareas
   }
 
   addTask(taskData: { title: string; categoryId?: string }) {
     this.taskService.addTask(taskData.title, taskData.categoryId);
-    this.tasksComponent.loadTasks();
+    this.loadTasks(); // Cargar las tareas actualizadas
   }
 
   toggleCompletion(task: Task) {
     this.taskService.toggleTaskCompletion(task);
-    this.loadTasks();
+    this.loadTasks(); // Actualiza la lista de tareas
   }
 
   deleteTask(taskId: string) {
     this.taskService.deleteTask(taskId);
-    this.loadTasks();
+    this.loadTasks(); // Actualiza la lista después de eliminar la tarea
   }
 }
