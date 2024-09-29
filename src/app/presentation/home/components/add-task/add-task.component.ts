@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ADD_TASK_CONFIG } from './add-task.config';
-import { EventEmitter, Output } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-task',
@@ -8,19 +8,44 @@ import { EventEmitter, Output } from '@angular/core';
   styleUrls: ['./add-task.component.scss'],
 })
 export class AddTaskComponent {
-  newTaskTitle: string = '';
-  newTaskCategoryId: string = '';
+  public newTaskTitle: string = '';
+  public newTaskCategoryId: string = '';
+  public newTaskDate: string | null = null;
+  public config = ADD_TASK_CONFIG;
 
-  config = ADD_TASK_CONFIG;
+  @Output() public addTask = new EventEmitter<{
+    title: string;
+    categoryId?: string;
+    date?: string;
+  }>();
 
-  @Output() addTask = new EventEmitter<{ title: string; categoryId?: string }>();
+  constructor(private alertController: AlertController) {}
 
-  onAddTask() {
+  public async onAddTask() {
     if (this.newTaskTitle.trim()) {
-      const categoryId = this.newTaskCategoryId || undefined;
-      this.addTask.emit({ title: this.newTaskTitle, categoryId });
-      this.newTaskTitle = '';
-      this.newTaskCategoryId = '';
+      this.addTask.emit({
+        title: this.newTaskTitle,
+        categoryId: this.newTaskCategoryId || '',
+        date: this.newTaskDate || undefined,
+      });
+      this.resetForm();
+    } else {
+      const alert = await this.alertController.create({
+        header: this.config.ALERTS.TITLE,
+        message: this.config.ALERTS.MESSAGE,
+        buttons: [this.config.ALERTS.BUTTON],
+      });
+      await alert.present();
     }
+  }
+
+  public resetForm() {
+    this.newTaskTitle = '';
+    this.newTaskCategoryId = '';
+    this.newTaskDate = null;
+  }
+
+  public clearDate() {
+    this.newTaskDate = null;
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../../domain/models/task.model';
 import { TaskRepository } from '../../application/ports/task.repository';
-import { EncryptedStorageService } from '../services/encrypted-storage.service';
+import { EncryptedStorageService } from '../services/encrypted-storage/encrypted-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +34,19 @@ export class LocalStorageTaskRepository implements TaskRepository {
     return tasks
       ? tasks.map(
           (taskData: any) =>
-            new Task(taskData.id, taskData.title, taskData.status, taskData.categoryId, new Date(taskData.createdAt))
+            new Task(
+              taskData.id,
+              taskData.title,
+              taskData.status,
+              taskData.categoryId,
+              new Date(taskData.createdAt),
+              taskData.date
+            )
         )
       : [];
+  }
+
+  findById(taskId: string): Task | undefined {
+    return this.findAll().find(task => task.id === taskId);
   }
 }

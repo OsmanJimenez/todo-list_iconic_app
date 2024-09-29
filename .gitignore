@@ -7,7 +7,6 @@
 /dist/
 /out/
 /coverage/
-/plugins/
 
 # Compilación de Cordova
 /www/

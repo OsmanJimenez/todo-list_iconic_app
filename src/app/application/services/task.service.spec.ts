@@ -42,20 +42,22 @@ describe('TaskService', () => {
     taskService = TestBed.inject(TaskService);
   });
 
-  it(`Given a new task,
+  it(`Given a new task with a specific date,
       When addTask is called,
-      Then it should save the task to the repository`, () => {
+      Then it should save the task with the specified date to the repository`, () => {
     // Arrange
     const title = 'New Task';
     const categoryId = '123';
+    const specificDate = '2024-09-30T00:00:00Z';
 
     // Act
-    const newTask = taskService.addTask(title, categoryId);
+    const newTask = taskService.addTask(title, categoryId, TaskStatus.Pending, specificDate);
 
     // Assert
     expect(newTask.title).toBe(title);
     expect(newTask.categoryId).toBe(categoryId);
     expect(newTask.status).toBe(TaskStatus.Pending);
+    expect(newTask.date).toBe(specificDate);
     expect(taskRepositoryMock.save).toHaveBeenCalledWith(newTask);
   });
 
@@ -103,33 +105,32 @@ describe('TaskService', () => {
   it(`Given a page and pageSize,
     When getTasks is called,
     Then it should return the correct slice of tasks sorted by createdAt`, () => {
-  // Arrange
-  const page = 0;
-  const pageSize = 1;
+    // Arrange
+    const page = 0;
+    const pageSize = 1;
 
-  // Act
-  const result = taskService.getTasks(page, pageSize);
+    // Act
+    const result = taskService.getTasks(page, pageSize);
 
-  // Assert
-  expect(taskRepositoryMock.findAll).toHaveBeenCalled();
-  expect(result.length).toBe(pageSize);
-  expect(result[0].createdAt.getTime()).toBeGreaterThanOrEqual(result[1]?.createdAt.getTime() || 0);
-});
+    // Assert
+    expect(taskRepositoryMock.findAll).toHaveBeenCalled();
+    expect(result.length).toBe(pageSize);
+    expect(result[0].createdAt.getTime()).toBeGreaterThanOrEqual(result[1]?.createdAt.getTime() || 0);
+  });
 
-it(`Given a second page and pageSize,
+  it(`Given a second page and pageSize,
     When getTasks is called,
     Then it should return the correct slice for the second page`, () => {
-  // Arrange
-  const page = 1;
-  const pageSize = 1;
+    // Arrange
+    const page = 1;
+    const pageSize = 1;
 
-  // Act
-  const result = taskService.getTasks(page, pageSize);
+    // Act
+    const result = taskService.getTasks(page, pageSize);
 
-  // Assert
-  expect(taskRepositoryMock.findAll).toHaveBeenCalled();
-  expect(result.length).toBe(pageSize);
-  expect(result[0].id).toBe('1');
-});
-
+    // Assert
+    expect(taskRepositoryMock.findAll).toHaveBeenCalled();
+    expect(result.length).toBe(pageSize);
+    expect(result[0].id).toBe('1');
+  });
 });

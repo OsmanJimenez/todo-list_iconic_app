@@ -35,3 +35,16 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+.no-shadow-toolbar {
+  --box-shadow: none;
+}
+
+.custom-modal {
+  --border-radius: 10px;
+}
+
+ion-modal {
+  --max-height: 320px;
+  padding: 20px;
+}

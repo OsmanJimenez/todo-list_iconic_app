@@ -7,13 +7,17 @@ import { CATEGORY_FILTER_CONFIG } from './category-filter.config';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent {
-  filterCategoryId: string = '';
+  public filterQuery: string = '';
+  public config = CATEGORY_FILTER_CONFIG;
 
-  config = CATEGORY_FILTER_CONFIG;
+  @Output() public filterCategory = new EventEmitter<string>();
 
-  @Output() filterCategory = new EventEmitter<string>();
+  public onFilterChange() {
+    this.filterCategory.emit(this.filterQuery.trim().toLowerCase());
+  }
 
-  onFilterChange() {
-    this.filterCategory.emit(this.filterCategoryId);
+  public clearFilter() {
+    this.filterQuery = '';
+    this.onFilterChange();
   }
 }

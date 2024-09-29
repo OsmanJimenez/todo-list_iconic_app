@@ -6,7 +6,8 @@ export class Task {
     public title: string,
     public status: TaskStatus = TaskStatus.Pending,
     public categoryId?: string,
-    public createdAt: Date = new Date()
+    public createdAt: Date = new Date(),
+    public date?: string | null,
   ) {}
 
   setStatus(newStatus: TaskStatus): void {

@@ -5,7 +5,7 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { Task } from '../../domain/models/task.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TaskStatus } from '../../domain/models/task-status.enum';
-import { RemoteConfigService } from '../../infrastructure/services/remote-config.service';
+import { RemoteConfigService } from '../../infrastructure/services/remote-config/remote-config.service';
 import { of } from 'rxjs';
 
 describe('HomePage', () => {
@@ -80,30 +80,36 @@ describe('HomePage', () => {
       Then should call loadTasks and loadRemoteConfig`, () => {
     // Arrange
     jest.spyOn(component, 'loadTasks');
-    jest.spyOn(component, 'loadRemoteConfig');
+    jest.spyOn(component, 'ngOnInit');
 
     // Act
     component.ngOnInit();
 
     // Assert
     expect(component.loadTasks).toHaveBeenCalled();
-    expect(component.loadRemoteConfig).toHaveBeenCalled();
+    expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
   });
 
   it(`Given remote config is activated,
       When loadRemoteConfig is called,
       Then it should initialize remote config observables`, () => {
     // Act
-    component.loadRemoteConfig();
+    component.ngOnInit();
 
     // Assert
     expect(remoteConfigServiceMock.activateRemoteConfig).toHaveBeenCalled();
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskCompletion');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('allowTaskDeletion');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('showAddTaskButton');
-    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith('enableCategoryFilter');
-
-    // Check if observables are initialized
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'allowTaskCompletion'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'allowTaskDeletion'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'showAddTaskButton'
+    );
+    expect(remoteConfigServiceMock.getBooleanValue$).toHaveBeenCalledWith(
+      'enableCategoryFilter'
+    );
     expect(component.allowTaskCompletion$).toBeDefined();
     expect(component.allowTaskDeletion$).toBeDefined();
     expect(component.showAddTaskButton$).toBeDefined();
@@ -114,14 +120,23 @@ describe('HomePage', () => {
       When addTask is called,
       Then should call taskService.addTask and reload tasks`, () => {
     // Arrange
-    const taskData = { title: 'New Task', categoryId: '123' };
+    const taskData = {
+      title: 'New Task',
+      categoryId: '123',
+      date: '2024-09-30',
+    };
     jest.spyOn(component, 'loadTasks');
 
     // Act
     component.addTask(taskData);
 
     // Assert
-    expect(taskServiceMock.addTask).toHaveBeenCalledWith(taskData.title, taskData.categoryId);
+    expect(taskServiceMock.addTask).toHaveBeenCalledWith(
+      taskData.title,
+      taskData.categoryId,
+      undefined,
+      taskData.date
+    );
     expect(component.loadTasks).toHaveBeenCalled();
   });
 
