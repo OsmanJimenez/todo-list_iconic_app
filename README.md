@@ -290,3 +290,12 @@ La aplicación Todo List está desplegada en el hosting de Firebase y se puede a
 
 Esta versión desplegada representa la última versión estable de la aplicación y está disponible para su uso inmediato en cualquier navegador web moderno.
 
+
+## 👤 Autor
+
+**Osman Armando Jiménez Cortés**  
+[Portafolio profesional](https://osmanjimenez.com/)  
+[Perfil de GitHub](https://github.com/OsmanJimenez)
+
+Ingeniero de Sistemas y Desarrollador Full Stack especializado en desarrollo web y aplicaciones móviles.
+
